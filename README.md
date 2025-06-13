@@ -1,7 +1,7 @@
 # NestJS User Management API
 
 ## Setup
-
+### gitclone https://github.com/Kenju0702/kiemtra1506.git
 ### 1. Cài đặt dependencies
 
 ```bash
