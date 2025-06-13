@@ -6,13 +6,14 @@ import { UserController } from './presentation/controllers/UserController';
 import { UserUseCasesModule } from './module/ModuleUser';
 import { AuthUseCaseAppModule } from './module/ModuleAuth';
 import { AuthController } from './presentation/controllers/AuthController';
+import { StudentController } from './presentation/controllers/StudentController';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,UserUseCasesModule,AuthUseCaseAppModule, // Đăng ký module chứa các use-case
   ],
-  controllers: [UserController,AuthController], // Đăng ký UserController
+  controllers: [UserController,AuthController,StudentController], // Đăng ký UserController
 
 })
 export class AppModule implements OnModuleInit {
