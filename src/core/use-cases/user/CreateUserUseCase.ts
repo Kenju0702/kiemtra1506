@@ -8,23 +8,27 @@ export class CreateUser {
   async execute(userData: Omit<User, 'id'>): Promise<User> {
     Logger.log(`Checking if email exists: ${userData.email}`);
     const existingUser = await this.userRepository.findByEmail(userData.email);
+    const existingUsername = await this.userRepository.findByUsername(userData.username);
+    const existingPhone = await this.userRepository.findByPhone(userData.phone);
     if (existingUser) {
       throw new Error('Email already exists');
+    }
+
+    if (existingUsername) {
+      throw new Error('Username already exists');
+    }
+
+    if (existingPhone) {
+      throw new Error('Phone already exists');
     }
 
     // Kiểm tra các field bắt buộc
     if (!userData.password) {
       throw new Error('Password is required');
     }
-
-    if (!userData.username) {
-      throw new Error('Username is required');
+    if (!userData.name) {
+      throw new Error('Name is required');
     }
-
-    if (!userData.phone) {
-      throw new Error('Phone is required');
-    }
-
     if (!userData.avatar) {
       throw new Error('Avatar is required');
     }
