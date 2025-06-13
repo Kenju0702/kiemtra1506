@@ -1,4 +1,3 @@
-// src/auth/strategy/jwt.strategy.ts (hoặc vị trí tương ứng trong project của bạn)
 import { Injectable } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { ConfigService } from '@nestjs/config'

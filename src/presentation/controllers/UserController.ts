@@ -13,7 +13,9 @@ import Logger from '../../shared/utils/Logger';  // Đảm bảo import đúng L
 import { Roles } from 'src/shared/auth/decorators/roles.decorator';
 import { JwtAuthGuard } from 'src/shared/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/shared/auth/guards/roles.guard';
-
+import { UserRole } from 'src/shared/enum/enum';
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserRole.ADMIN)
 @Controller('users')
 export class UserController {
   constructor(
@@ -25,22 +27,20 @@ export class UserController {
     private readonly deleteUser: DeleteUser,
   ) { }
 
-   // Cấu hình route chỉ cho phép 'admin' truy cập
-   @Get('admin')
-   @UseGuards(JwtAuthGuard, RolesGuard)
-   @Roles('admin')
-   getAdminUsers() {
-     return 'Admin users only'
-   }
- 
-   // Cấu hình route chỉ cho phép 'student' truy cập
-   @Get('student')
-   @UseGuards(JwtAuthGuard, RolesGuard)
-   @Roles('student')
-   getStudentUsers() {
-     return 'Student users only'
-   }
-   
+  // Cấu hình route chỉ cho phép 'admin' truy cập
+  @Get('admin')
+  getAdminUsers() {
+    return 'Admin users only'
+  }
+
+  // Cấu hình route chỉ cho phép 'student' truy cập
+  // @Get('student')
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles(UserRole.STUDENT)
+  // getStudentUsers() {
+  //   return 'Student users only'
+  // }
+
   @Get()
   async getUsers(): Promise<User[]> {
     try {
@@ -55,7 +55,7 @@ export class UserController {
 
   @Get('search')
   async search(@Query() query: SearchUserDto): Promise<User[]> {
-    Logger.log('Search query received: ' + JSON.stringify(query)); 
+    Logger.log('Search query received: ' + JSON.stringify(query));
     try {
       const users = await this.searchUsers.execute(query);
       Logger.log(`Found ${users.length} users matching search criteria.`);

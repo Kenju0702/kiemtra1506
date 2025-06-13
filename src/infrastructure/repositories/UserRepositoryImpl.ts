@@ -145,7 +145,6 @@ export class UserRepositoryImpl implements UserRepository {
 
   async findByEmail(email: string): Promise<User | null> {
     try {
-      Logger.log(`Searching for user with email: ${email}`);
       const user = await UserModel.findOne({ email })
         .select('email password name role isDeleted');
 
@@ -175,7 +174,6 @@ export class UserRepositoryImpl implements UserRepository {
 
   async findByPhone(phone: string): Promise<User | null> {
     try {
-      Logger.log(`Searching for user with phone: ${phone}`);
       const user = await UserModel.findOne({ phone })
         .select('email password name role isDeleted');
 
@@ -203,7 +201,6 @@ export class UserRepositoryImpl implements UserRepository {
 
   async findByUsername(username: string): Promise<User | null> {
     try {
-      Logger.log(`Searching for user with username: ${username}`);
       const user = await UserModel.findOne({ username })
         .select('email password name role isDeleted');
 

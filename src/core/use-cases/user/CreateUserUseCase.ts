@@ -6,7 +6,7 @@ export class CreateUser {
   constructor(private readonly userRepository: UserRepository) {}
 
   async execute(userData: Omit<User, 'id'>): Promise<User> {
-    Logger.log(`Checking if email exists: ${userData.email}`);
+
     const existingUser = await this.userRepository.findByEmail(userData.email);
     const existingUsername = await this.userRepository.findByUsername(userData.username);
     const existingPhone = await this.userRepository.findByPhone(userData.phone);
@@ -22,7 +22,6 @@ export class CreateUser {
       throw new Error('Phone already exists');
     }
 
-    // Kiểm tra các field bắt buộc
     if (!userData.password) {
       throw new Error('Password is required');
     }
@@ -55,7 +54,6 @@ export class CreateUser {
 
     try {
       const createdUser = await this.userRepository.create(newUser);
-      Logger.log(`User created with ID: ${createdUser.id}`);
       return createdUser;
     } catch (error) {
       Logger.error('Error creating user: ' + error.message);

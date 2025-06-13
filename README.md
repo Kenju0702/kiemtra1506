@@ -1,34 +1,116 @@
-#set up
-1. npm i
-2. npm run start
-# api 
-1.find all user
-exemple: http://localhost:5000/api/users/
-2.search is param (email,username,phone,v.v....)
-exemple: http://localhost:5000/api/users/search?username=admin2
-3.Create User
-exemple http://localhost:5000/api/users
-json 
-{
-    "name": "Admin1",
-    "username": "admin1",
-    "email": "admin2@example.com",
-    "password": "admin123",
-    "phone": "0888888889",
-    "avatar": "https://example.com/avatar.jpg",
-    "status": "active",
-    "role": "admin"
-  }
+# NestJS User Management API
 
-4.get user by id 
-http://localhost:5000/api/users/684c405c9a738a5f0edea7b5
-5.update infomation user
-http://localhost:5000/api/users/684c405c9a738a5f0edea7b5
+## Setup
+
+### 1. Cài đặt dependencies
+
+```bash
+npm install
+```
+
+### 2. Chạy ứng dụng
+
+```bash
+npm run start
+```
+
+## API Hướng dẫn sử dụng
+
+
+---
+
+### I. Đăng nhập
+
+**POST** `/api/auth/login`
+
+```json
+{
+  "username": "admin2",
+  "password": "huhu"
+}
+```
+
+---
+
+### II. Đăng ký
+
+**POST** `/api/auth/register`
+
+```json
+{
+  "name": "Admin3",
+  "username": "admin3",
+  "email": "admin4@example.com",
+  "password": "admin123",
+  "phone": "0888888899",
+  "avatar": "https://example.com/avatar.jpg"
+}
+```
+
+---
+
+### 1. Lấy tất cả người dùng
+
+**GET** `/api/users/`
+
+---
+
+### 2. Tìm kiếm người dùng
+
+**GET** `/api/users/search?username=admin2`
+
+Tham số: `email`, `username`, `phone`, v.v.
+
+---
+
+### 3. Tạo người dùng
+
+**POST** `/api/users`
+
+```json
+{
+  "name": "Admin1",
+  "username": "admin1",
+  "email": "admin2@example.com",
+  "password": "admin123",
+  "phone": "0888888889",
+  "avatar": "https://example.com/avatar.jpg",
+  "status": "active",
+  "role": "admin"
+}
+```
+
+---
+
+### 4. Lấy người dùng theo ID
+
+**GET** `/api/users/{id}`
+
+---
+
+### 5. Cập nhật người dùng
+
+**PATCH** `/api/users/{id}`
+
+```json
 {
   "name": "kevin tien",
   "email": "updated@example.com",
   "password":"hihihi",
   "isDeleted": true
 }
-5 soft delete 
-http://localhost:5000/api/users/684c405c9a738a5f0edea7b5/delete
+```
+
+---
+
+### 6. Xóa mềm người dùng
+
+**PATCH** `/api/users/{id}/delete`
+
+---
+
+### 7. Test quyền truy cập Student
+
+**GET** `/api/student/StudentOnlyUse`
+
+> **Lưu ý:** Tất cả các API yêu cầu token, vui lòng đăng nhập để lấy token trước và để ý file môi trường cổng 5000

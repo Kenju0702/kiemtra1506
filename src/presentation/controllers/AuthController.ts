@@ -15,7 +15,6 @@ export class AuthController {
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
     try {
-      Logger.log('Login request received for username: ' + loginDto.username);
       const token = await this.loginUseCase.execute(loginDto);  // pass DTO directly
       return { token };
     } catch (error) {
@@ -27,7 +26,6 @@ export class AuthController {
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
     try {
-      Logger.log('Registration request received for username: ' + registerDto.username);
       const user = await this.registerUseCase.execute(registerDto);
       return { user };
     } catch (error) {
