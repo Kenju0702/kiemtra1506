@@ -40,6 +40,7 @@ export class UserController {
    getStudentUsers() {
      return 'Student users only'
    }
+   
   @Get()
   async getUsers(): Promise<User[]> {
     try {

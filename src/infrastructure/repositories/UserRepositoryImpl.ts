@@ -79,7 +79,7 @@ export class UserRepositoryImpl implements UserRepository {
         email,
         phone,
         status,
-        userName,
+        username,
         avatar,
         name,
         role,
@@ -98,7 +98,7 @@ export class UserRepositoryImpl implements UserRepository {
       if (id) filter._id = id;
       if (email) filter.email = { $regex: email, $options: 'i' };
       if (name) filter.name = { $regex: name, $options: 'i' };
-      if (userName) filter.username = { $regex: userName, $options: 'i' };
+      if (username) filter.username = { $regex: username, $options: 'i' };
       if (phone) filter.phone = { $regex: phone, $options: 'i' };
       if (role) filter.role = role;
       if (isDeleted !== undefined) filter.isDeleted = isDeleted;
@@ -110,12 +110,11 @@ export class UserRepositoryImpl implements UserRepository {
       const totalCount = await UserModel.countDocuments(filter);
       const totalPages = Math.ceil(totalCount / limitNumber);
 
-      // Sử dụng `select` để chỉ lấy các trường cần thiết, giúp giảm độ phức tạp của query
       const results = await UserModel.find(filter)
         .skip(skip)
         .limit(limitNumber)
         .sort(sort)
-        .select('name email role isDeleted'); // Chỉ lấy trường cần thiết để giảm bớt dữ liệu trả về
+        .select('name username email role isDeleted'); // Chọn các trường cần thiết
 
       return {
         totalCount,
@@ -202,13 +201,38 @@ export class UserRepositoryImpl implements UserRepository {
     }
   }
 
+  async findByUsername(username: string): Promise<User | null> {
+    try {
+      Logger.log(`Searching for user with username: ${username}`);
+      const user = await UserModel.findOne({ username })
+        .select('email password name role isDeleted');
+
+      if (!user) {
+        Logger.warn(`User with username ${username} not found.`);
+        return null;
+      }
+      return new User(
+        user._id.toString(),
+        user.name,
+        user.username,
+        user.email,
+        user.password,
+        user.phone,
+        user.avatar,
+        user.status as 'active' | 'inactive',
+        user.role as 'student' | 'admin',
+        user.isDeleted ?? false
+      );
+    } catch (error) {
+      Logger.error(`Error finding user by email: ${error.message}\n${error.stack}`);
+      return null;
+    }
+  }
 
   async create(user: Omit<User, 'id'>): Promise<User> {
     try {
-      const hashedPassword = await bcrypt.hash(user.password, 10);
       const createdUser = await UserModel.create({
         ...user,
-        password: hashedPassword,
       });
 
       return new User(
@@ -232,12 +256,7 @@ export class UserRepositoryImpl implements UserRepository {
 
   async update(id: string, user: Partial<User>): Promise<User | null> {
     try {
-      // Hash mật khẩu nếu có
-      if (user.password) {
-        user.password = await bcrypt.hash(user.password, 10);
-      }
-
-      // Cập nhật người dùng và trả về bản ghi mới
+    
       const updatedUser = await UserModel.findByIdAndUpdate(id, user, { new: true });
 
       if (!updatedUser) return null;

@@ -15,14 +15,13 @@ export class RegisterUseCase {
     const { name, email, password, phone, avatar, username } = registerDto;
 
     // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Tạo người dùng mới với các giá trị mặc định an toàn
     const newUser: Omit<User, 'id'> = {
       name,
       email,
       username,
-      password: hashedPassword,
+      password,
       phone,
       avatar,
       role: UserRole.STUDENT,

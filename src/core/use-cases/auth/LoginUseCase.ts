@@ -3,6 +3,7 @@ import { UserRepository } from '../../interfaces/UserRepository';
 import { LoginDto } from '../../../presentation/dto/auth/LoginAuthDto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';  // Import JwtService
+import { log } from 'console';
 
 @Injectable()
 export class LoginUseCase {
@@ -12,17 +13,20 @@ export class LoginUseCase {
   ) {}
 
   async execute(loginDto: LoginDto): Promise<string> {
-    // Tìm người dùng qua email
-    const user = await this.userRepository.findByEmail(loginDto.email);
+    // Tìm người dùng qua username
+    const user = await this.userRepository.findByUsername(loginDto.username);
+    Logger.log(`Login attempt with username: ${loginDto.username}`);
+    Logger.log(`Login attempt with password: ${loginDto.password}`);
+    // Kiểm tra xem người dùng có tồn tại không
     if (!user) {
-      Logger.warn(`User not found with email: ${loginDto.email}`);
+      Logger.warn(`User not found with username: ${loginDto.username}`);
       throw new Error('Invalid credentials');
     }
-
+    Logger.log(`User found: ${JSON.stringify(user)}`);
     // Kiểm tra mật khẩu nhập vào so với mật khẩu đã băm trong cơ sở dữ liệu
     const isPasswordValid = await bcrypt.compare(loginDto.password, user.password);
     if (!isPasswordValid) {
-      Logger.warn(`Invalid password attempt for email: ${loginDto.email}`);
+      Logger.warn(`Invalid password attempt for username: ${loginDto.username}`);
       throw new Error('Invalid credentials');
     }
 

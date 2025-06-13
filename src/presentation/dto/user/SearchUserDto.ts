@@ -10,7 +10,7 @@ export class SearchUserDto {
   name?: string
   @IsOptional()
   @IsString()
-  userName?: string
+  username?: string
 
   @IsOptional()
   @IsString()

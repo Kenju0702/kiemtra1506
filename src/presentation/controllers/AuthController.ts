@@ -15,11 +15,11 @@ export class AuthController {
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
     try {
-      Logger.log('Login request received for email: ' + loginDto.email);
+      Logger.log('Login request received for username: ' + loginDto.username);
       const token = await this.loginUseCase.execute(loginDto);  // pass DTO directly
       return { token };
     } catch (error) {
-      Logger.error('Login failed for email: ' + loginDto.email + ' Error: ' + error.message);
+      Logger.error('Login failed for username: ' + loginDto.username + ' Error: ' + error.message);
       throw new HttpException('Login failed', HttpStatus.UNAUTHORIZED);
     }
   }
@@ -27,11 +27,11 @@ export class AuthController {
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
     try {
-      Logger.log('Registration request received for email: ' + registerDto.email);
+      Logger.log('Registration request received for username: ' + registerDto.username);
       const user = await this.registerUseCase.execute(registerDto);
       return { user };
     } catch (error) {
-      Logger.error('Registration failed for email: ' + registerDto.email + ' Error: ' + error.message);
+      Logger.error('Registration failed for username: ' + registerDto.username + ' Error: ' + error.message);
       throw new HttpException('Registration failed', HttpStatus.BAD_REQUEST);
     }
   }
