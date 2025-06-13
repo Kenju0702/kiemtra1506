@@ -25,12 +25,8 @@ export class AppModule implements OnModuleInit {
       throw new Error('MONGO_URI is not defined in the environment variables');
     }
 
-    console.log('Testing MongoDB connection with URI:', uri);
-
     try {
       await mongoose.connect(uri);
-      console.log('MongoDB connected successfully!');
-
       // Kiểm tra trạng thái kết nối trước khi seed
       if (mongoose.connection.readyState !== 1) {
         console.error('MongoDB connection is not ready. Seeding aborted.');

@@ -8,11 +8,10 @@ import Logger from '../../shared/utils/Logger'; // Import Logger
 export class UserRepositoryImpl implements UserRepository {
   async findAll(): Promise<User[]> {
     try {
-      // Lấy tất cả người dùng từ cơ sở dữ liệu
       const users = await UserModel.find();
       return users.map(user =>
         new User(
-          user._id.toString(), // Convert ObjectId to string
+          user._id.toString(), 
           user.name,
           user.username,
           user.email,
@@ -37,7 +36,6 @@ export class UserRepositoryImpl implements UserRepository {
         { name: 'Jane Smith', email: 'jane.smith@example.com', password: 'password456', role: 'instructor' },
       ];
 
-      // Thử dùng insertOne thay vì insertMany
       for (const user of sampleUsers) {
         await UserModel.create(user);
       }
@@ -68,7 +66,7 @@ export class UserRepositoryImpl implements UserRepository {
       );
     } catch (error) {
       Logger.error(`Error finding user by id: ${error.message}\n${error.stack}`);
-      return null;  // Không ném lỗi, trả về null hoặc thông báo lỗi tùy ý
+      return null; 
     }
   }
 
@@ -153,7 +151,6 @@ export class UserRepositoryImpl implements UserRepository {
         return null;
       }
 
-      // Chuyển đổi Document thành User
       return new User(
         user._id.toString(),
         user.name,
@@ -255,7 +252,6 @@ export class UserRepositoryImpl implements UserRepository {
     try {
     
       const updatedUser = await UserModel.findByIdAndUpdate(id, user, { new: true });
-
       if (!updatedUser) return null;
 
       return new User(

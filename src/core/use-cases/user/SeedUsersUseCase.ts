@@ -1,6 +1,7 @@
 import { UserRepository } from '../../interfaces/UserRepository';
 import { UserRole, UserStatus } from 'src/shared/enum/enum';
 import * as bcrypt from 'bcrypt';
+import { Logger } from '@nestjs/common';
 
 export class SeedUsers {
   constructor(private readonly userRepository: UserRepository) {}
@@ -37,9 +38,9 @@ export class SeedUsers {
       };
 
       const createdUser = await this.userRepository.create(newUser);
-      console.log(`✅ Seeded user: ${createdUser.id} - ${createdUser.name}`);
+      Logger.log(`✅ Seeded user: ${createdUser.id} - ${createdUser.name}`);
     }
 
-    console.log('🌱 Sample users seeded successfully!');
+    Logger.log('🌱 Sample users seeded successfully!');
   }
 }

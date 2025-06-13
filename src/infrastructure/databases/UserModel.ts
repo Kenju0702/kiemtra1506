@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
 import * as bcrypt from 'bcrypt';
+import { Logger } from '@nestjs/common';
 
-// Định nghĩa schema cho người dùng
 const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
@@ -13,7 +13,6 @@ const userSchema = new mongoose.Schema(
       unique: true,
       validate: {
         validator: function (v: string) {
-          // Kiểm tra email có hợp lệ không
           return validator.isEmail(v);
         },
         message: (props: any) => `${props.value} is not a valid email!`
@@ -25,7 +24,6 @@ const userSchema = new mongoose.Schema(
       required: true,
       validate: {
         validator: function (v: string) {
-          // Kiểm tra số điện thoại có hợp lệ không
           return validator.isMobilePhone(v, 'any', { strictMode: false });
         },
         message: (props: any) => `${props.value} is not a valid phone number!`
@@ -48,7 +46,7 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-// So sánh mật khẩu đã hash với mật khẩu người dùng nhập vào
+
 userSchema.methods.comparePassword = async function (candidatePassword: string) {
   try {
     return await bcrypt.compare(candidatePassword, this.password);
@@ -57,7 +55,6 @@ userSchema.methods.comparePassword = async function (candidatePassword: string) 
   }
 };
 
-// Loại bỏ mật khẩu khỏi đối tượng khi trả về
 userSchema.methods.toJSON = function () {
   const userObject = this.toObject();
   delete userObject.password;
@@ -65,8 +62,7 @@ userSchema.methods.toJSON = function () {
 };
 
 userSchema.post('save', function (doc) {
-  // Bạn có thể thực hiện các xử lý sau khi lưu dữ liệu, chẳng hạn như logging, audit,...
-  console.log(`User ${doc.email} has been saved successfully!`);
+  Logger.log(`User ${doc.email} has been saved successfully!`);
 });
 
 export default mongoose.model('User', userSchema);

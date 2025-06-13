@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { SeedUsers } from '../../core/use-cases/user/SeedUsersUseCase';
 import { UserRepositoryImpl } from '../repositories/UserRepositoryImpl';
 
@@ -11,7 +11,7 @@ export class UserSeeder implements OnModuleInit {
   }
 
   async onModuleInit() {
-    console.log('Seeding sample users...');
+    Logger.log('Seeding sample users...');
     await this.seedUsers.execute();
   }
 }

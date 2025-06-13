@@ -33,19 +33,10 @@ export class UserController {
     return 'Admin users only'
   }
 
-  // Cấu hình route chỉ cho phép 'student' truy cập
-  // @Get('student')
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles(UserRole.STUDENT)
-  // getStudentUsers() {
-  //   return 'Student users only'
-  // }
-
   @Get()
   async getUsers(): Promise<User[]> {
     try {
       const users = await this.getAllUsers.execute();
-      Logger.log('Fetched all users');
       return users;
     } catch (error) {
       Logger.error('Failed to retrieve users: ' + error.message);
@@ -55,10 +46,8 @@ export class UserController {
 
   @Get('search')
   async search(@Query() query: SearchUserDto): Promise<User[]> {
-    Logger.log('Search query received: ' + JSON.stringify(query));
     try {
       const users = await this.searchUsers.execute(query);
-      Logger.log(`Found ${users.length} users matching search criteria.`);
       return users;
     } catch (error) {
       Logger.error('Error during search: ' + error.message);
@@ -69,9 +58,7 @@ export class UserController {
   @Post()
   async CreateUser(@Body() body: CreateUserDto): Promise<User> {
     try {
-      Logger.log('Received body to create user: ' + JSON.stringify(body));  // Log the received body
       const user = await this.createUser.execute(body);
-      Logger.log('User created successfully: ' + user.id);
       return user;
     } catch (error) {
       Logger.error('Failed to create user: ' + error.message);
@@ -82,7 +69,6 @@ export class UserController {
   @Get(':id')
   async GetUserById(@Param('id') id: string): Promise<User> {
     try {
-      Logger.log(`Fetching user by ID: ${id}`);
       const user = await this.getUserById.execute(id);
       if (!user) {
         Logger.warn(`User not found: ${id}`);
@@ -95,13 +81,12 @@ export class UserController {
     }
   }
 
-  @Patch(':id') // hoặc @Put(':id')
+  @Patch(':id') 
   async UpdateUser(
     @Param('id') id: string,
     @Body() userData: Partial<UpdateUserDto>,
   ): Promise<User | null> {
     try {
-      Logger.log(`Updating user with ID: ${id}`);
       const user = await this.updateUser.execute(id, userData);
       if (!user) {
         Logger.warn(`User not found for update: ${id}`);
@@ -116,7 +101,6 @@ export class UserController {
   @Patch(':id/delete')
   async updateIsDeleted(@Param('id') id: string): Promise<User | null> {
     try {
-      Logger.log(`Deleting user with ID: ${id}`);
       const user = await this.deleteUser.execute(id);
       if (!user) {
         Logger.warn(`User not found for deletion: ${id}`);

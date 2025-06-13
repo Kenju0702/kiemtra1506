@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
 
 @Module({
   imports: [
-    ConfigModule, // để đọc .env
+    ConfigModule,
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
