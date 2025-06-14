@@ -27,7 +27,7 @@ export class UserController {
     private readonly deleteUser: DeleteUser,
   ) { }
 
-  // Cấu hình route chỉ cho phép 'admin' truy cập
+
   @Get('admin')
   getAdminUsers() {
     return 'Admin users only'
